@@ -1,0 +1,88 @@
+# ─── Secrets — never commit ─────────────────────────────────────────────
+.env
+*.key
+
+# ─── Source data (gitignored where not authorized to share) ─────────────
+# raw_data/Legal Complaints PDFs and raw_data/Factiva Results are shipped
+# (private repo; user authorized 2026-05-30 — Factiva is Dow Jones licensed).
+Factive Search/
+Old Versions/
+GeorgeSolomon_CaregivingSystem_1999HandbookofAttachment.pdf
+
+# ─── Pre-publication manuscripts ────────────────────────────────────────
+*.docx
+!Coding_Instructions_v7_Legal_Final.docx
+!Coding_Instructions_v7_Media_Final.docx
+*.pptx
+!figure1_pipeline.pptx
+!figure2_media_pipeline.pptx
+!pipeline_image.pptx
+
+# ─── Notebooks — kept local; analysis lives in .py scripts ──────────────
+*.ipynb
+
+# ─── Intermediate text artifacts (regeneratable / local only) ───────────
+raw_texts/
+media_raw_texts/
+media_cleaned_texts/
+media_cleaned_texts_backup/
+recovered_transcripts/
+
+# ─── Derived Excels ─────────────────────────────────────────────────────
+# Block .xlsx by default; whitelist (basename match) the pipeline data files
+# a collaborator needs. Patterns without a slash match by filename at any depth.
+*.xlsx
+# Legal pipeline (in modified_data/ and output/)
+!legal_paragraphs.xlsx
+!legal_paragraphs_llm.xlsx
+!legal_paragraphs_llm_p1.xlsx
+!legal_fewshot_v7.xlsx
+!Legal IRR v7 STRATIFIED N150.xlsx
+!CODED Legal IRR v7 STRATIFIED N150.xlsx
+!CODED Media IRR v7 STRATIFIED N150.xlsx
+!CODED fixed Media IRR v7 STRATIFIED N150.xlsx
+!irr_v7_legal_scored.xlsx
+!irr_v7_media_scored.xlsx
+# Media pipeline (paragraph-level only; article-level stays local)
+!media_paragraphs.xlsx
+!media_paragraphs_llm.xlsx
+!media_paragraphs_llm_p1.xlsx
+!media_fewshot_v7.xlsx
+!Media IRR v7 STRATIFIED N150.xlsx
+
+# Audit CSVs (generated)
+*.csv
+
+# Backup / scratch Excels (regenerated locally; not part of repo)
+legal_paragraphs_v1_backup.xlsx
+legal_paragraphs_llm_v2_gpt5mini_backup.xlsx
+media_articles_llm_prefewshot_backup.xlsx
+
+# ─── Raw source data (kept local, not in the repo) ──────────────────────
+# Factiva PDFs are Dow Jones licensed; legal complaint PDFs and the extracted
+# source text stay local too. Everything downstream lives in modified_data/.
+raw_data/
+
+# ─── Internal project notes ─────────────────────────────────────────────
+CLAUDE.md
+
+# ─── Python ─────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# ─── OS ─────────────────────────────────────────────────────────────────
+.DS_Store
+
+# ─── Run logs (local only) ──────────────────────────────────────────────
+*.log
+.Rhistory
+
+# ─── Superseded scripts (kept local for reference) ──────────────────────
+compute_irr.py
+
+# ─── Stale generated figures (from old/dev scripts) ─────────────────────
+figures/fig0_pipeline.png
+figures/fig_substantive_meaning.png
+figures/n_summary.png
