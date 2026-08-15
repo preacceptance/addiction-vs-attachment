@@ -2,15 +2,17 @@
 .env
 *.key
 
-# ─── Source data (gitignored where not authorized to share) ─────────────
-# raw_data/Legal Complaints PDFs and raw_data/Factiva Results are shipped
-# (private repo; user authorized 2026-05-30 — Factiva is Dow Jones licensed).
+# ─── Local workshops and legacy folders (not part of the tracked repo) ──
+new_data/
 Factive Search/
 Old Versions/
 GeorgeSolomon_CaregivingSystem_1999HandbookofAttachment.pdf
 
 # ─── Pre-publication manuscripts ────────────────────────────────────────
 *.docx
+!Coding_Instructions_v9_Legal_final.docx
+!Coding_Instructions_v9_Media_final.docx
+# archived-era manuals stay tracked in archive/
 !Coding_Instructions_v7_Legal_Final.docx
 !Coding_Instructions_v7_Media_Final.docx
 *.pptx
@@ -29,10 +31,33 @@ media_cleaned_texts_backup/
 recovered_transcripts/
 
 # ─── Derived Excels ─────────────────────────────────────────────────────
-# Block .xlsx by default; whitelist (basename match) the pipeline data files
-# a collaborator needs. Patterns without a slash match by filename at any depth.
+# Block .xlsx by default; whitelist (basename match) the pipeline data files.
 *.xlsx
-# Legal pipeline (in modified_data/ and output/)
+# 24-case pipeline — extracted corpora + few-shots (modified_data/)
+!legal_CODED_paragraphs_24.xlsx
+!media_CODED_paragraphs_24.xlsx
+!fewshots_RESOLVED_grid.xlsx
+!media_fewshots_RESOLVED_grid.xlsx
+# 24-case pipeline — coding outputs (output/)
+!legal_paragraphs_24.xlsx
+!media_paragraphs_24.xlsx
+!legal_paragraphs_24_llm_v9p1.xlsx
+!legal_paragraphs_24_llm_v9p2.xlsx
+!media_paragraphs_24_llm_v9p1.xlsx
+!media_paragraphs_24_llm_v9p2.xlsx
+!media_paragraphs_24_llm_p2.xlsx
+# 24-case pipeline — IRR record (modified_data/ + output/)
+!CODED - Legal IRR v9codes 24cases STRATIFIED N150.xlsx
+!CODED Legal IRR v8 24cases STRATIFIED N150.xlsx
+!CODED Media IRR v8 24cases STRATIFIED N150.xlsx
+!_manifest_legal_irr24_v9.xlsx
+!_manifest_legal_irr24.xlsx
+!_manifest_media_irr24.xlsx
+!irr24_legal_scored.xlsx
+!irr24_media_scored.xlsx
+!irr24_legal_scored_v9.xlsx
+!irr24_media_scored_v9.xlsx
+# archived 14-case era (archive/) — keep the files that were tracked there
 !legal_paragraphs.xlsx
 !legal_paragraphs_llm.xlsx
 !legal_paragraphs_llm_p1.xlsx
@@ -43,25 +68,21 @@ recovered_transcripts/
 !CODED fixed Media IRR v7 STRATIFIED N150.xlsx
 !irr_v7_legal_scored.xlsx
 !irr_v7_media_scored.xlsx
-# Media pipeline (paragraph-level only; article-level stays local)
 !media_paragraphs.xlsx
 !media_paragraphs_llm.xlsx
 !media_paragraphs_llm_p1.xlsx
 !media_fewshot_v7.xlsx
 !Media IRR v7 STRATIFIED N150.xlsx
 
-# Audit CSVs (generated)
+# ─── CSVs: generated audit files ignored; the corpus manifest is tracked ─
 *.csv
+!corpus_manifest.csv
 
-# Backup / scratch Excels (regenerated locally; not part of repo)
-legal_paragraphs_v1_backup.xlsx
-legal_paragraphs_llm_v2_gpt5mini_backup.xlsx
-media_articles_llm_prefewshot_backup.xlsx
-
-# ─── Raw source data (kept local, not in the repo) ──────────────────────
-# Factiva PDFs are Dow Jones licensed; legal complaint PDFs and the extracted
-# source text stay local too. Everything downstream lives in modified_data/.
-raw_data/
+# ─── API caches and run logs (regeneratable, local only) ────────────────
+*.jsonl
+*.log
+.Rhistory
+.RData
 
 # ─── Internal project notes ─────────────────────────────────────────────
 CLAUDE.md
@@ -75,14 +96,8 @@ venv/
 # ─── OS ─────────────────────────────────────────────────────────────────
 .DS_Store
 
-# ─── Run logs (local only) ──────────────────────────────────────────────
-*.log
-.Rhistory
-
-# ─── Superseded scripts (kept local for reference) ──────────────────────
+# superseded stray kept local
 compute_irr.py
 
-# ─── Stale generated figures (from old/dev scripts) ─────────────────────
-figures/fig0_pipeline.png
-figures/fig_substantive_meaning.png
-figures/n_summary.png
+# extraction QA review pages (large, local only)
+code/extraction/media_review/

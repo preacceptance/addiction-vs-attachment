@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Render all media-corpus figures from media_paragraphs.xlsx (surface) and
-media_paragraphs_llm.xlsx (deeper LLM coding); outputs to figures/.
+Render all media-corpus figures from media_paragraphs_24_llm_v9p2.xlsx
+(surface + deeper LLM coding, 24 cases; coding set only); outputs to figures/.
 
 Parallels legal_figures.py (shared palette/helpers via figures_common). All analyses
 restricted to unique-usable paragraphs (article_usable & ~is_duplicate).
@@ -27,8 +27,8 @@ from figures_common import (
     deeper_meaning_totals, surface_and_deeper_totals,
 )
 
-MEDIA_PARA = DATA_DIR / "media_paragraphs.xlsx"
-MEDIA_LLM  = OUTPUT_DIR / "media_paragraphs_llm.xlsx"
+MEDIA_PARA = DATA_DIR / "media_paragraphs_24_llm_v9p2.xlsx"
+MEDIA_LLM  = OUTPUT_DIR / "media_paragraphs_24_llm_v9p2.xlsx"
 
 
 # Restrict to unique-usable paragraphs (drops unusable articles + cross-search dupes).

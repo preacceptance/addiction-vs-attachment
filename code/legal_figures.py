@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Render all legal-corpus figures from legal_paragraphs.xlsx (surface) and
-legal_paragraphs_llm.xlsx (deeper LLM coding); outputs to figures/.
+Render all legal-corpus figures from legal_paragraphs_24_llm_v9p2.xlsx
+(surface + deeper LLM coding, 24 complaints); outputs to figures/.
 
 Palette and plotting helpers are shared via figures_common (parallels media_figures.py).
 """
@@ -21,8 +21,8 @@ from figures_common import (
     deeper_meaning_totals, surface_and_deeper_totals,
 )
 
-LEGAL_PARA = DATA_DIR / "legal_paragraphs.xlsx"
-LEGAL_LLM  = OUTPUT_DIR / "legal_paragraphs_llm.xlsx"
+LEGAL_PARA = DATA_DIR / "legal_paragraphs_24_llm_v9p2.xlsx"
+LEGAL_LLM  = OUTPUT_DIR / "legal_paragraphs_24_llm_v9p2.xlsx"
 
 
 # ─────────────────────────────────────────────────────────────────────────
@@ -125,7 +125,7 @@ def figure3_per_case_legal(legal_para, legal_llm):
     surf = surf.reindex(order); deep = deep.reindex(order)
     ymax = max(surf.values.max(), deep.values.max()) * 1.12
 
-    fig, axes = plt.subplots(2, 1, figsize=(13, 9), sharex=True)
+    fig, axes = plt.subplots(2, 1, figsize=(17, 9), sharex=True)
     x = np.arange(len(order))
     w = 0.27
     for ax, df_, panel_label, title in [
@@ -194,7 +194,7 @@ def surface_vocabulary_per_case(legal_para):
     ct["total"] = ct.sum(axis=1)
     ct = ct.sort_values("total", ascending=False)
 
-    fig, ax = plt.subplots(figsize=(11, 5.5))
+    fig, ax = plt.subplots(figsize=(14, 5.5))
     x = np.arange(len(ct))
     w = 0.27
     ax.bar(x - w, ct["addiction"], w, label="Addiction Only", color=ADDICT)

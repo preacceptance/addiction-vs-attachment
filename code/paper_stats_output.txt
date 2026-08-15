@@ -1,0 +1,130 @@
+
+Legal paragraphs: 9000
+Within-LLM kappa (two runs): 0.90
+Human vs LLM: N = 150, kappa = 0.807, raw = 86.7%
+
+Surface counts:
+
+ addiction attachment       both    neither
+        91         49          1       8859
+Surface addiction/attachment: 1.8571
+
+Deeper counts:
+
+ addiction attachment       both    neither
+        79        843          8       8070
+Deeper attachment/addiction: 10.6709
+
+Per-complaint addiction vs attachment counts:
+            case surface_addict surface_attach deeper_addict deeper_attach
+         Peralta             17              5            13           133
+              AF             13              2            11            96
+        Shamblin              3              2             2            94
+         Carrier              1              2             4            52
+            Gray              1              3             0            49
+         Gavalas              0              4             0            37
+          Garcia             14              2            13            36
+        DeCruise              2              2             2            30
+         Winters              0              1             0            30
+           Raine              0              1             0            29
+        Enneking              4              2             2            27
+           Lines              0              3             4            27
+          Madden              3              2             2            25
+             Fox              3              2             4            24
+ FirstCountyBank              0              3             0            23
+           Lacey              3              2             1            23
+              DW             14              0            11            22
+          Brooks              3              2             3            20
+        Lantieri              3              4             1            20
+        Soelberg              0              1             0            16
+           Irwin              3              2             2            13
+     TurnerScott              4              0             4            13
+           Joshi              0              0             0             3
+             Doe              0              2             0             1
+Deeper attachment > addiction in 24 of 24 complaints.
+
+Surface (rows) x Deeper (cols):
+            deeper
+surface      addiction attachment both neither
+  addiction         51          1    5      34
+  attachment         0         45    0       4
+  both               0          0    1       0
+  neither           28        797    2    8032
+
+Stuart-Maxwell: chi2 = 793.64, df = 3, p = 1.04e-171, w = 0.297
+
+Per-category McNemar (Holm-corrected):
+   category moved_out moved_in        direction    chi2      p_raw    p_exact cohen_g     p_holm
+  addiction        40       28 surface > deeper   1.779  1.822e-01  1.818e-01  0.0882  1.822e-01
+ attachment         4      798 deeper > surface 784.101 1.545e-172 1.289e-231  0.4950 6.179e-172
+       both         0        7 deeper > surface   5.143  2.334e-02  1.563e-02  0.5000  4.668e-02
+    neither       827       38 surface > deeper 717.854 3.920e-158 2.887e-194  0.4561 1.176e-157
+
+Media paragraphs: 31662
+Within-LLM kappa (two runs, unique texts): 0.89
+Human vs LLM: N = 150, kappa = 0.798, raw = 85.3%
+
+Legal paragraphs: 9000
+Within-LLM kappa (two runs): 0.90
+Human vs LLM: N = 150, kappa = 0.807, raw = 86.7%
+
+Surface counts:
+
+ addiction attachment       both    neither
+        91         49          1       8859
+Surface addiction/attachment: 1.8571
+
+Deeper counts:
+
+ addiction attachment       both    neither
+        79        843          8       8070
+Deeper attachment/addiction: 10.6709
+
+Per-complaint addiction vs attachment counts:
+            case surface_addict surface_attach deeper_addict deeper_attach
+         Peralta             17              5            13           133
+              AF             13              2            11            96
+        Shamblin              3              2             2            94
+         Carrier              1              2             4            52
+            Gray              1              3             0            49
+         Gavalas              0              4             0            37
+          Garcia             14              2            13            36
+        DeCruise              2              2             2            30
+         Winters              0              1             0            30
+           Raine              0              1             0            29
+        Enneking              4              2             2            27
+           Lines              0              3             4            27
+          Madden              3              2             2            25
+             Fox              3              2             4            24
+ FirstCountyBank              0              3             0            23
+           Lacey              3              2             1            23
+              DW             14              0            11            22
+          Brooks              3              2             3            20
+        Lantieri              3              4             1            20
+        Soelberg              0              1             0            16
+           Irwin              3              2             2            13
+     TurnerScott              4              0             4            13
+           Joshi              0              0             0             3
+             Doe              0              2             0             1
+Deeper attachment > addiction in 24 of 24 complaints.
+
+Surface (rows) x Deeper (cols):
+            deeper
+surface      addiction attachment both neither
+  addiction         51          1    5      34
+  attachment         0         45    0       4
+  both               0          0    1       0
+  neither           28        797    2    8032
+
+Stuart-Maxwell: chi2 = 793.64, df = 3, p = 1.04e-171, w = 0.297
+
+Per-category McNemar (Holm-corrected):
+   category moved_out moved_in        direction    chi2      p_raw    p_exact cohen_g     p_holm
+  addiction        40       28 surface > deeper   1.779  1.822e-01  1.818e-01  0.0882  1.822e-01
+ attachment         4      798 deeper > surface 784.101 1.545e-172 1.289e-231  0.4950 6.179e-172
+       both         0        7 deeper > surface   5.143  2.334e-02  1.563e-02  0.5000  4.668e-02
+    neither       827       38 surface > deeper 717.854 3.920e-158 2.887e-194  0.4561 1.176e-157
+
+Media paragraphs: 31662
+Within-LLM kappa (two runs, unique texts): 0.89
+Human vs LLM: N = 150, kappa = 0.798, raw = 85.3%

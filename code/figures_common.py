@@ -13,12 +13,11 @@ import matplotlib.patches as mpatches
 import numpy as np
 import pandas as pd
 
-ROOT       = Path(__file__).resolve().parent.parent
-FIG_DIR    = ROOT / "figures"
-OUTPUT_DIR = ROOT / "output"
-DATA_DIR   = ROOT / "modified_data"
+HERE       = Path(__file__).resolve().parent
+FIG_DIR    = HERE.parent / "figures"
+OUTPUT_DIR = HERE.parent / "output"   # LLM production workbooks
+DATA_DIR   = HERE.parent / "output"   # surface columns live in the same workbooks
 FIG_DIR.mkdir(exist_ok=True)
-OUTPUT_DIR.mkdir(exist_ok=True)
 
 # ── palette ──────────────────────────────────────────────────────────────
 ADDICT  = "#c0392b"

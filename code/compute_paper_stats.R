@@ -15,47 +15,48 @@ script <- gsub("~\\+~", " ", script)   # Rscript encodes spaces in --file= as ~+
 here <- if (length(script)) dirname(script) else dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(here)
 
-# Paired design: each paragraph is coded twice — surface (dictionary) and deeper (LLM).
+sink("paper_stats_output.txt", split = TRUE)   # store outputs
+
 cats <- c("addiction", "attachment", "both", "neither")
 
 # ==============================================================================
 # STUDY 1: LEGAL COMPLAINTS
 # ==============================================================================
 
-legal <- read_excel("../output/legal_paragraphs_llm.xlsx")   # production = pass 2
+legal <- read_excel("../output/legal_paragraphs_24_llm_v9p2.xlsx")   # we take the codes from the second pass of the LLM coding because within-LLM reliability is high
 cat("\nLegal paragraphs:", nrow(legal), "\n")
 
-# ---- within-LLM reliability: pass 1 vs pass 2 (production), few-shots excluded ----
-legal_p1 <- read_excel("../output/legal_paragraphs_llm_p1.xlsx")
-w <- merge(legal_p1[, c("case", "para_seq", "deeper_meaning", "is_fewshot")],
-           legal[, c("case", "para_seq", "deeper_meaning")],
-           by = c("case", "para_seq"), suffixes = c("_p1", "_p2"))
+# ---- within-LLM reliability ----
+legal_p1 <- read_excel("../output/legal_paragraphs_24_llm_v9p1.xlsx")
+w <- merge(legal_p1[, c("unit_id", "deeper_meaning", "is_fewshot")],
+           legal[, c("unit_id", "deeper_meaning")],
+           by = "unit_id", suffixes = c("_p1", "_p2"))
 w <- w[!as.logical(w$is_fewshot), ]
 cat(sprintf("Within-LLM kappa (two runs): %.2f\n",
     CohenKappa(table(factor(w$deeper_meaning_p1, cats), factor(w$deeper_meaning_p2, cats)))))
 
-# ---- human vs LLM reliability: stratified N=150 consensus vs LLM ----
-cons <- read_excel("../modified_data/CODED Legal IRR v7 STRATIFIED N150.xlsx", sheet = "Consensus")
+# ---- human vs LLM reliability ----
+cons <- read_excel("../modified_data/CODED - Legal IRR v9codes 24cases STRATIFIED N150.xlsx", sheet = "Consensus")
 cons$final_code <- tolower(trimws(cons$final_code))
-irr <- merge(cons[, c("case", "para_seq", "final_code")],
-             legal[, c("case", "para_seq", "deeper_meaning")],
-             by = c("case", "para_seq"), all.x = TRUE)
+irr <- merge(cons[, c("unit_id", "final_code")],
+             legal[, c("unit_id", "deeper_meaning")],
+             by = "unit_id", all.x = TRUE)
 irr$deeper_meaning <- tolower(trimws(irr$deeper_meaning))
 cat(sprintf("Human vs LLM: N = %d, kappa = %.3f, raw = %.1f%%\n", nrow(irr),
     CohenKappa(table(factor(irr$final_code, cats), factor(irr$deeper_meaning, cats))),
     100 * mean(irr$final_code == irr$deeper_meaning)))
 
-# ---- surface counts + ratio (addiction 2.29x attachment) ----
+# ---- surface counts + ratio ----
 surf <- table(factor(legal$surface_meaning, levels = cats))
 cat("\nSurface counts:\n"); print(surf)
 cat(sprintf("Surface addiction/attachment: %.4f\n", surf["addiction"] / surf["attachment"]))
 
-# ---- deeper counts + ratio (attachment 3.75x addiction) ----
+# ---- deeper counts + ratio ----
 deep <- table(factor(legal$deeper_meaning, levels = cats))
 cat("\nDeeper counts:\n"); print(deep)
 cat(sprintf("Deeper attachment/addiction: %.4f\n", deep["attachment"] / deep["addiction"]))
 
-# ---- per-complaint addiction vs attachment counts (attachment dominates in 12 of 14) ----
+# ---- per-complaint addiction vs attachment counts ----
 # One row per complaint; addiction/attachment paragraph counts at both levels.
 per_case <- function(col) {
   t <- table(legal$case, factor(legal[[col]], levels = cats))
@@ -72,7 +73,7 @@ print(case_tab, row.names = FALSE)
 cat(sprintf("Deeper attachment > addiction in %d of %d complaints.\n",
             sum(case_tab$deeper_attach > case_tab$deeper_addict), nrow(case_tab)))
 
-# ---- surface x deeper crosstab (Panel C; ~5% of no-vocab paragraphs -> attachment) ----
+# ---- surface x deeper crosstab (Panel C) ----
 sq <- table(surface = factor(legal$surface_meaning, levels = cats),
             deeper  = factor(legal$deeper_meaning,  levels = cats))
 cat("\nSurface (rows) x Deeper (cols):\n"); print(sq)
@@ -102,50 +103,46 @@ res$p_holm <- p.adjust(praw, method = "holm")   # Holm across the 4 categories
 cat("\nPer-category McNemar (Holm-corrected):\n")
 print(res, row.names = FALSE, digits = 4)
 
+
 # ==============================================================================
 # STUDY 2: MEDIA ARTICLES
 # ==============================================================================
 
-media <- read_excel("../output/media_paragraphs_llm.xlsx")
-
-# Keep unique-usable paragraphs (usable article, not a cross-search duplicate).
-keep <- as.logical(media$article_usable) & !as.logical(media$is_duplicate)
-keep[is.na(keep)] <- FALSE
-media <- media[keep, ]
+media <- read_excel("../output/media_paragraphs_24_llm_v9p2.xlsx")   
 cat("\nMedia paragraphs:", nrow(media), "\n")
 
-# ---- within-LLM reliability: pass 1 vs pass 2 (production), few-shots excluded ----
-media_p1 <- read_excel("../output/media_paragraphs_llm_p1.xlsx")
-media_p1 <- media_p1[as.logical(media_p1$article_usable) & !as.logical(media_p1$is_duplicate), ]
-w <- merge(media_p1[, c("document_id", "para_idx", "deeper_meaning", "is_fewshot")],
-           media[, c("document_id", "para_idx", "deeper_meaning")],
-           by = c("document_id", "para_idx"), suffixes = c("_p1", "_p2"))
-w <- w[!as.logical(w$is_fewshot), ]
-cat(sprintf("Within-LLM kappa (two runs): %.2f\n",
+# ---- within-LLM reliability ----
+media_p1 <- read_excel("../output/media_paragraphs_24_llm_v9p1.xlsx")
+w <- merge(media_p1[, c("unit_id", "deeper_meaning")],
+           media[, c("unit_id", "deeper_meaning", "is_fewshot", "is_fewshot_dup", "text_key")],
+           by = "unit_id", suffixes = c("_p1", "_p2"))
+w <- w[!as.logical(w$is_fewshot) & !as.logical(w$is_fewshot_dup), ]
+w <- w[!duplicated(w$text_key), ]
+cat(sprintf("Within-LLM kappa (two runs, unique texts): %.2f\n",
     CohenKappa(table(factor(w$deeper_meaning_p1, cats), factor(w$deeper_meaning_p2, cats)))))
 
-# ---- human vs LLM reliability: stratified N=150 consensus vs LLM ----
-cons <- read_excel("../modified_data/CODED fixed Media IRR v7 STRATIFIED N150.xlsx", sheet = "Consensus")
+# ---- human vs LLM reliability----
+cons <- read_excel("../modified_data/CODED Media IRR v8 24cases STRATIFIED N150.xlsx", sheet = "Consensus")
 cons$final_code <- tolower(trimws(cons$final_code))
-irr <- merge(cons[, c("document_id", "para_idx", "final_code")],
-             media[, c("document_id", "para_idx", "deeper_meaning")],
-             by = c("document_id", "para_idx"), all.x = TRUE)
+irr <- merge(cons[, c("unit_id", "final_code")],
+             media[, c("unit_id", "deeper_meaning")],
+             by = "unit_id", all.x = TRUE)
 irr$deeper_meaning <- tolower(trimws(irr$deeper_meaning))
 cat(sprintf("Human vs LLM: N = %d, kappa = %.3f, raw = %.1f%%\n", nrow(irr),
     CohenKappa(table(factor(irr$final_code, cats), factor(irr$deeper_meaning, cats))),
     100 * mean(irr$final_code == irr$deeper_meaning)))
 
-# ---- surface counts + ratio (addiction 1.27x attachment) ----
+# ---- surface counts + ratio  ----
 surf <- table(factor(media$surface_meaning, levels = cats))
 cat("\nSurface counts:\n"); print(surf)
 cat(sprintf("Surface addiction/attachment: %.4f\n", surf["addiction"] / surf["attachment"]))
 
-# ---- deeper counts + ratio (attachment 7.84x addiction) ----
+# ---- deeper counts + ratio ----
 deep <- table(factor(media$deeper_meaning, levels = cats))
 cat("\nDeeper counts:\n"); print(deep)
 cat(sprintf("Deeper attachment/addiction: %.4f\n", deep["attachment"] / deep["addiction"]))
 
-# ---- surface x deeper crosstab (Panel C; ~5% of no-vocab paragraphs -> attachment) ----
+# ---- surface x deeper crosstab ----
 sq <- table(surface = factor(media$surface_meaning, levels = cats),
             deeper  = factor(media$deeper_meaning,  levels = cats))
 cat("\nSurface (rows) x Deeper (cols):\n"); print(sq)
@@ -174,3 +171,4 @@ for (c in cats) {
 res$p_holm <- p.adjust(praw, method = "holm")   # Holm across the 4 categories
 cat("\nPer-category McNemar (Holm-corrected):\n")
 print(res, row.names = FALSE, digits = 4)
+
